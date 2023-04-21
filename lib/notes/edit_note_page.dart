@@ -75,15 +75,18 @@ class _EditNotePageState extends State<EditNotePage> {
               ),
               TextFormField(
                 controller: _descriptionController,
-                maxLines: 3,
+               // maxLines: 3,
                 textInputAction: TextInputAction.done,
+
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                 ),
                 decoration: InputDecoration(
+                  border: InputBorder.none,
                   hintText: 'Description',
+
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -104,6 +107,8 @@ class _EditNotePageState extends State<EditNotePage> {
 
     final json = notesInfo.toJson();
     await docUser.set(json);
+
+
 
   }
 

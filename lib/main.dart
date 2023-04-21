@@ -5,6 +5,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:notes_app_flutter/Firebase_auth/page/auth_page.dart';
 
 import 'Firebase_auth/page/main_page.dart';
 

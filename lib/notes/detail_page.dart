@@ -19,13 +19,13 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
-    _titleController.text = widget.documentSnapshot["title"];
+    _titleController.text = widget.documentSnapshot["title"].toString();
     _descriptionController.text =
         widget.documentSnapshot["description"].toString();
   }
 
-
   Future<void> _update() async {
+    print("DocumentSnapshotId: ${widget.documentSnapshot.id}");
     await FirebaseFirestore.instance
         .collection('user')
         .doc(widget.documentSnapshot.id)
@@ -36,8 +36,17 @@ class _DetailPageState extends State<DetailPage> {
         .then((_) => print('success'))
         .catchError((error) => print('Failed: $error'));
 
-    _titleController.text = '';
-    _descriptionController.text = '';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Changes updated successfully',
+        ),
+
+      ),
+    );
+
+    //_titleController.text = '';
+    // _descriptionController.text = '';
   }
 
   @override
@@ -51,10 +60,9 @@ class _DetailPageState extends State<DetailPage> {
               Icons.save,
             ),
             onPressed: () {
-              _update();
-
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => NotePage()));
+              _update().then((value) {
+                Navigator.of(context).pop();
+              });
             },
           ),
         ],
@@ -62,8 +70,7 @@ class _DetailPageState extends State<DetailPage> {
       body: Column(
         children: [
           TextFormField(
-            //controller: _titleController,
-            initialValue: widget.documentSnapshot["title"],
+            controller: _titleController,
             textInputAction: TextInputAction.next,
             style: TextStyle(
               color: Colors.black,
@@ -83,8 +90,8 @@ class _DetailPageState extends State<DetailPage> {
             height: 15,
           ),
           TextFormField(
-            initialValue: widget.documentSnapshot["description"],
-            maxLines: 3,
+            controller: _descriptionController,
+            maxLines: null,
             textInputAction: TextInputAction.done,
             style: TextStyle(
               color: Colors.black,
@@ -92,6 +99,7 @@ class _DetailPageState extends State<DetailPage> {
               fontSize: 24,
             ),
             decoration: InputDecoration(
+              border: InputBorder.none,
               hintText: 'Description',
             ),
             validator: (value) {
